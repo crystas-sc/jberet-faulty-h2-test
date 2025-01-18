@@ -34,6 +34,8 @@ public class App implements QuarkusApplication {
                         .reader("myItemReader")
                         .processor("myItemProcessor")
                         .writer("myItemWriter")
+                
+                        
                         .build())
                 .build();
 

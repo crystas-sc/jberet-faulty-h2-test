@@ -13,32 +13,32 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
-
 @ApplicationScoped
 @jakarta.inject.Named
 public class MyItemWriter extends jakarta.batch.api.chunk.AbstractItemWriter {
 
- @Inject
-    private AgroalDataSource dataSource;
+    @Inject
+    private javax.sql.DataSource dataSource;
+
+    public static final String SQL_UPDATE = "UPDATE customers SET delivery_base_price = ? WHERE id = ?";
 
     @Override
     public void writeItems(List<Object> items) throws Exception {
-        for (Object item : items) {
-            ItemDto itemDto = (ItemDto) item;
-            // Write each item to the desired output
-            System.out.println("Writing item: " + item);
-            try (Connection connection = dataSource.getConnection()) {
-                String sql = "UPDATE customers SET delivery_base_price = ? WHERE id = ?";
-                try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection()) {
+            for (Object item : items) {
+                ItemDto itemDto = (ItemDto) item;
+                // Write each item to the desired output
+                System.out.println("Writing item: " + item);
+
+                try (PreparedStatement statement = connection.prepareStatement(SQL_UPDATE)) {
                     statement.setBigDecimal(1, itemDto.getCost());
                     statement.setLong(2, itemDto.getId());
                     statement.executeUpdate();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
 
 }

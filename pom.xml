@@ -78,11 +78,23 @@
     <dependency>
       <groupId>io.quarkiverse.jberet</groupId>
       <artifactId>quarkus-jberet</artifactId>
-      <version>2.3.1</version>
+      <version>2.4.0</version>
+      <exclusions>
+        <!-- <exclusion>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-agroal</artifactId>
+        </exclusion> -->
+        <!-- <exclusion>
+          <groupId>io.agroal</groupId>
+          <artifactId>agroal-pool</artifactId>
+        </exclusion> -->
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jdbc-h2</artifactId>
+      <version>3.17.4</version>
+            <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -117,15 +129,15 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-orm-panache</artifactId>
         </dependency> -->
-        <!-- <dependency>
+        <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jdbc-postgresql</artifactId>
-        </dependency> -->
+        </dependency>
 
-         <dependency>
+         <!-- <dependency>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-agroal</artifactId>
-    </dependency>
+    </dependency> -->
 
 
   </dependencies>

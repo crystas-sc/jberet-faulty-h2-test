@@ -3,7 +3,6 @@ package org.capps.batch;
 import java.util.List;
 
 import io.agroal.api.AgroalDataSource;
-import io.agroal.pool.DataSource;
 import jakarta.batch.api.chunk.ItemReader;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

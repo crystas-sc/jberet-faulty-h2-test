@@ -1,0 +1,4 @@
+org/capps/batch/MyItemProcessor.class
+org/capps/App.class
+org/capps/batch/MyItemWriter.class
+org/capps/batch/MyItemReader.class

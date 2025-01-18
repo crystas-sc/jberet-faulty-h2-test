@@ -1,19 +1,42 @@
 package org.capps.batch;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import javax.batch.api.chunk.ItemProcessor;
 import javax.inject.Named;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.capps.dto.ItemDto;
+import org.capps.service.DistanceCalculator;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 @jakarta.inject.Named
 public class MyItemProcessor implements jakarta.batch.api.chunk.ItemProcessor {
 
+    @Inject
+    DistanceCalculator distanceCalculator;
+
+    @Inject
+    ObjectMapper objectMapper;
+
     @Override
-    public String processItem(Object item) throws Exception {
-        // Example processing: convert item to uppercase
+    public ItemDto processItem(Object item) throws Exception {
         System.out.println("Processing item: " + item);
-        return item.toString().toUpperCase();
+
+        ItemDto itemDto = objectMapper.readValue(item.toString(), ItemDto.class);
+        double distanceCost = distanceCalculator.calculateCostBasedOnDistance(40.7128, -74.0060,
+                Double.valueOf(itemDto.getLat()), Double.valueOf(itemDto.getLng()), 10);
+        itemDto = itemDto.toBuilder()
+                .cost(new BigDecimal(Double.toString(distanceCost))
+                        .setScale(2, RoundingMode.HALF_UP))
+                .build();
+        System.out.println("distanceCost " + distanceCost);
+
+        return itemDto;
     }
 }

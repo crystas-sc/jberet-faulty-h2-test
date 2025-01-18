@@ -1,9 +1,12 @@
 package org.capps;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 import org.capps.testutil.FaultyDataSource;
 import org.capps.testutil.H2QueryUtil;
@@ -33,7 +36,7 @@ public class AppTest {
      */
 
     @BeforeEach
-    public  void setUp() {
+    public void setUp() {
         try (Connection connection = dataSource.getConnection();) {
 
             H2QueryUtil.insertMockData(1, connection);
@@ -43,8 +46,14 @@ public class AppTest {
     }
 
     @Test
-    public void testApp() {
+    public void testApp() throws Exception {
         app.run((String[]) null);
-        assertTrue(true);
+        try (Connection connection = dataSource.getConnection();) {
+
+            List<Map<String, Object>> res = H2QueryUtil
+                    .executeQuery("select * from customers where delivery_base_price > 10", connection);
+            System.out.println(res);
+            assertEquals(res.size(), 1);
+        } 
     }
 }

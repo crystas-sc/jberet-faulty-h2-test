@@ -29,9 +29,9 @@ public class MyItemReader implements ItemReader {
         this.items = new ArrayList<>();
         this.currentIndex = 0;
         // Add some sample items
-        items.add("Item1");
-        items.add("Item2");
-        items.add("Item3");
+        // items.add("Item1");
+        // items.add("Item2");
+        // items.add("Item3");
     }
 
     public Object readItem() {

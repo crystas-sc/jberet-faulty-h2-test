@@ -1,20 +1,12 @@
 package org.capps;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import javax.batch.operations.JobOperator;
-import javax.batch.runtime.JobExecution;
+import javax.enterprise.context.ApplicationScoped;
 
-import org.capps.batch.MyItemProcessor;
-import org.capps.batch.MyItemReader;
-import org.capps.batch.MyItemWriter;
 import org.jberet.job.model.Job;
 import org.jberet.job.model.JobBuilder;
-import org.jberet.job.model.Step;
 import org.jberet.job.model.StepBuilder;
 import org.jberet.runtime.JobExecutionImpl;
 

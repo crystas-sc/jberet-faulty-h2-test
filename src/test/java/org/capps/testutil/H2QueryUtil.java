@@ -2,14 +2,14 @@ package org.capps.testutil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Random;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.Random;
 
 public class H2QueryUtil {
     public static String insertMockData(int numberOfRecords, Connection connection) {
@@ -26,7 +26,7 @@ public class H2QueryUtil {
                 pstmt.setString(5,
                         String.format("{\"lat\": %.6f, \"lng\": %.6f}", random.nextDouble() * 180 - 90,
                                 random.nextDouble() * 360 - 180));
-                pstmt.setDouble(6, random.nextDouble() * 100);
+                pstmt.setDouble(6, 0);
                 pstmt.addBatch();
             }
             int[] res = pstmt.executeBatch();
@@ -57,5 +57,17 @@ public class H2QueryUtil {
         }
 
         return resultList;
+    }
+
+    public static String deleteTable(String tableName, Connection connection) {
+        String sql = "delete from  " + tableName;
+
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sql);
+            return "Table " + tableName + " rows deleted successfully.";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error deleting table: " + e.getMessage();
+        }
     }
 }

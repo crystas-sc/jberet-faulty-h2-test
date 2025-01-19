@@ -1,24 +1,36 @@
 package org.capps.testutil;
 
-import org.mockito.Mockito;
-
-import java.sql.*;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.CallableStatement;
+import java.sql.Clob;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.NClob;
+import java.sql.PreparedStatement;
+import java.sql.SQLClientInfoException;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.SQLXML;
+import java.sql.Savepoint;
+import java.sql.Statement;
+import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Executor;
 
+import org.mockito.Mockito;
+
 public class FaultyDbConnection implements Connection {
     Connection delegate;
     Set<FaultyState> faultableQueries;
-
 
     public FaultyDbConnection(Connection delegate, Set<FaultyState> faultableQueries) {
         this.delegate = delegate;
         this.faultableQueries = faultableQueries;
 
     }
-
 
     @Override
     public Statement createStatement() throws SQLException {
@@ -32,8 +44,10 @@ public class FaultyDbConnection implements Connection {
             found.currentIndex++;
             if (found.faultyIndexes.contains(found.currentIndex)) {
                 PreparedStatement preparedStatement = Mockito.mock(PreparedStatement.class);
-                Mockito.when(preparedStatement.executeUpdate()).thenThrow(new RuntimeException("Simulated Prepared Statement failure"));
-                Mockito.when(preparedStatement.execute()).thenThrow(new RuntimeException("Simulated Prepared Statement failure"));
+                Mockito.when(preparedStatement.executeUpdate())
+                        .thenThrow(new RuntimeException("Simulated Prepared Statement failure"));
+                Mockito.when(preparedStatement.execute())
+                        .thenThrow(new RuntimeException("Simulated Prepared Statement failure"));
                 return preparedStatement;
             }
         }
@@ -47,8 +61,10 @@ public class FaultyDbConnection implements Connection {
             found.currentIndex++;
             if (found.faultyIndexes.contains(found.currentIndex)) {
                 CallableStatement preparedStatement = Mockito.mock(CallableStatement.class);
-                Mockito.when(preparedStatement.executeUpdate()).thenThrow(new RuntimeException("Simulated Prepared Statement failure"));
-                Mockito.when(preparedStatement.execute()).thenThrow(new RuntimeException("Simulated Prepared Statement failure"));
+                Mockito.when(preparedStatement.executeUpdate())
+                        .thenThrow(new RuntimeException("Simulated Prepared Statement failure"));
+                Mockito.when(preparedStatement.execute())
+                        .thenThrow(new RuntimeException("Simulated Prepared Statement failure"));
                 return preparedStatement;
             }
         }
@@ -141,7 +157,8 @@ public class FaultyDbConnection implements Connection {
     }
 
     @Override
-    public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+    public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency)
+            throws SQLException {
         return delegate.prepareStatement(sql, resultSetType, resultSetConcurrency);
     }
 
@@ -191,17 +208,20 @@ public class FaultyDbConnection implements Connection {
     }
 
     @Override
-    public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+    public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability)
+            throws SQLException {
         return delegate.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 
     @Override
-    public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+    public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency,
+            int resultSetHoldability) throws SQLException {
         return delegate.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 
     @Override
-    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency,
+            int resultSetHoldability) throws SQLException {
         return delegate.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 

@@ -1,16 +1,15 @@
 package org.capps.testutil;
 
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 
 public class JSONFunctions {
     static ObjectMapper objectMapper = new ObjectMapper();
@@ -23,7 +22,7 @@ public class JSONFunctions {
         for (int i = 0; i < keysAndValues.length; i += 2) {
             try {
                 String nextValue = keysAndValues[i + 1];
-                if (nextValue!= null) {
+                if (nextValue != null) {
                     jsonMap.put(keysAndValues[i], objectMapper.readTree(nextValue));
                 } else {
                     jsonMap.put(keysAndValues[i], null);
@@ -49,7 +48,7 @@ public class JSONFunctions {
     }
 
     public static String jsonbSet(String json, String key, String newValue) throws JsonProcessingException {
-//        JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
+        // JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
         String keys[] = key.replaceAll("^\\{|\\}$", "").split(",");
         JsonNode rootNode = objectMapper.readValue(json, JsonNode.class);
         if (rootNode instanceof TextNode) {
@@ -66,11 +65,12 @@ public class JSONFunctions {
         }
 
         if (newValue.substring(0, 2).equals("\"{")) {
-            ((ObjectNode) rootNode).put(keys[keys.length - 1], objectMapper.readTree(objectMapper.readTree(newValue).asText()));
+            ((ObjectNode) rootNode).put(keys[keys.length - 1],
+                    objectMapper.readTree(objectMapper.readTree(newValue).asText()));
         } else
             ((ObjectNode) rootNode).put(keys[keys.length - 1], newValue);
-//        Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
-//        jsonMap.put(key, newValue);
+        // Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
+        // jsonMap.put(key, newValue);
 
         return objectMapper.writeValueAsString(rootNode);
     }
@@ -111,6 +111,4 @@ public class JSONFunctions {
         }
     }
 
-
 }
-
